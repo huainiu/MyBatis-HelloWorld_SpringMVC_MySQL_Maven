@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- "namespace" specifies the interface for which this mapping file is determined -->
+<mapper namespace="my.mybatis.persistence.UserMapper">
+
+	<!-- <resultMap/> tag specifies the mapping between the User class and the user table -->
+	<!-- In the "type" attribute, we are using an alias of the User class defined in mybatis/config.xml. -->
+	<resultMap id="UserResultMap" type="User">
+		<result property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="standard" column="standard" />
+		<result property="age" column="age" />
+		<result property="sex" column="sex" />
+	</resultMap>
+	
+	<select id="get" parameterType="int" resultMap="UserResultMap">
+		SELECT id, name, standard, age, sex
+		FROM user
+		WHERE id = #{id};
+	</select>
+
+	<!-- "id" specifies the function for which the inner SQL statement has been defined -->
+	<!-- "resultMap" specifies the return type of the SQL statement as a collection -->
+	<select id="getAll" resultMap="UserResultMap">
+		SELECT id, name, standard, age, sex
+		FROM user;
+	</select>
+
+	<!-- useGeneratedKeys=true enables the retrieving keys generated internally by the database -->
+	<!-- (e.g. auto increment fields). See http://www.mybatis.org/core/sqlmap-xml.html -->
+	<insert id="create" parameterType="User" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO user (name, standard, age, sex)
+		VALUES (#{name}, #{standard}, #{age}, #{sex});
+	</insert>
+
+	<update id="update" parameterType="User">
+		UPDATE user
+		SET	name = #{name},
+			standard = #{standard},
+			age = #{age},
+			sex = #{sex}
+		WHERE id = #{id};
+	</update>
+
+	<delete id="delete" parameterType="int">
+		DELETE FROM user
+		WHERE id = #{id};
+	</delete>
+</mapper>
