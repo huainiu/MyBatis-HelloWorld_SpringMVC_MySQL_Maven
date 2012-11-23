@@ -13,6 +13,8 @@ import org.springframework.dao.DataIntegrityViolationException;
  *         &lt;skalicky.tomas@gmail.com&gt;
  */
 public class UserMapperTest extends MapperTest {
+	
+	private static final boolean FORCE_COMMIT = true;
 
 	@Test
 	public void testNullUserName() {
@@ -43,6 +45,8 @@ public class UserMapperTest extends MapperTest {
 			user.setId(-1);
 			user.setName(userNameV1);
 			userMapper.create(user);
+			// see http://stackoverflow.com/questions/4372640/why-do-mybatis-insert-update-functions-now-require-a-commit-after-adding-fk-to-d
+			sqlSession.commit(FORCE_COMMIT);
 			final int userId = user.getId();
 			Assert.assertTrue(userId > 0);
 
@@ -53,12 +57,14 @@ public class UserMapperTest extends MapperTest {
 			final String userNameV2 = "Tomáš Skalický";
 			user.setName(userNameV2);
 			userMapper.update(user);
+			sqlSession.commit(FORCE_COMMIT);
 
 			user = userMapper.get(userId);
 			Assert.assertNotNull(user);
 			Assert.assertEquals(userNameV2, user.getName());
 
 			userMapper.delete(user.getId());
+			sqlSession.commit(FORCE_COMMIT);
 
 			user = userMapper.get(userId);
 			Assert.assertNull(user);
