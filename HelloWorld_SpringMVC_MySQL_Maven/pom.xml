@@ -45,17 +45,18 @@
 				<version>2.2</version>
 			</plugin>
 
-			<!-- (see http://mojo.codehaus.org/tomcat-maven-plugin/usage.html) -->
+			<!-- (see http://tomcat.apache.org/maven-plugin-2.0/tomcat7-maven-plugin/index.html) -->
 			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>
 				<artifactId>tomcat7-maven-plugin</artifactId>
-				<version>2.0-beta-1</version>
+				<version>2.0</version>
 				<configuration>
 					<!-- (see http://tomcat.apache.org/tomcat-7.0-doc/manager-howto.html#Supported_Manager_Commands) -->
 					<url>http://localhost:9080/manager/text</url>
 					<path>/${project.build.finalName}</path>
 					<charset>${project.build.sourceEncoding}</charset>
 					<server>local_tomcat</server>
+					<update>true</update>
 				</configuration>
 			</plugin>
 		</plugins>
